@@ -37,7 +37,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '3'
+    value: '100'
   states:
     bus_sink: false
     bus_source: false
@@ -61,7 +61,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: int(48e3)
+    value: int(16e3)
   states:
     bus_sink: false
     bus_source: false
@@ -85,7 +85,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '1'
+    value: '0.5'
   states:
     bus_sink: false
     bus_source: false
@@ -99,8 +99,8 @@ blocks:
     affinity: ''
     alias: ''
     audio_decim: '1'
-    audio_pass: '15000'
-    audio_stop: '16000'
+    audio_pass: '5000'
+    audio_stop: '6000'
     chan_rate: samp_rate
     comment: ''
     deviation: 1e3
@@ -112,7 +112,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1016, 36.0]
+    coordinate: [1600, 28.0]
     rotation: 0
     state: enabled
 - name: analog_noise_source_x_0
@@ -169,7 +169,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [664, 360.0]
+    coordinate: [840, 360.0]
     rotation: 0
     state: enabled
 - name: audio_source_0
@@ -208,7 +208,7 @@ blocks:
     bus_structure: null
     coordinate: [1216, 88.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: blocks_add_const_vxx_1_0
   id: blocks_add_const_vxx
   parameters:
@@ -278,7 +278,24 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [936, 232.0]
+    coordinate: [1112, 232.0]
+    rotation: 0
+    state: enabled
+- name: blocks_freqshift_cc_0
+  id: blocks_freqshift_cc
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    freq: -2e3
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    sample_rate: samp_rate
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1208, 72.0]
     rotation: 0
     state: enabled
 - name: blocks_throttle2_1
@@ -313,7 +330,7 @@ blocks:
     maximum: '0.1'
     maxoutbuf: '0'
     minoutbuf: '0'
-    samples_per_second: samp_rate*10
+    samples_per_second: samp_rate
     type: float
     vlen: '1'
   states:
@@ -446,7 +463,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [752, 232.0]
+    coordinate: [928, 232.0]
     rotation: 0
     state: enabled
 - name: import_0
@@ -476,7 +493,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1432, 32.0]
+    coordinate: [1888, 40.0]
     rotation: 0
     state: enabled
 - name: info_with_audio_mod_source_str2samp_0_0
@@ -512,7 +529,55 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [0, 208.0]
+    coordinate: [32, 272.0]
+    rotation: 0
+    state: enabled
+- name: low_pass_filter_0
+  id: low_pass_filter
+  parameters:
+    affinity: ''
+    alias: ''
+    beta: '6.76'
+    comment: ''
+    cutoff_freq: 5e3
+    decim: '1'
+    gain: '1'
+    interp: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    type: fir_filter_ccf
+    width: 1e3
+    win: window.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1392, 28.0]
+    rotation: 0
+    state: enabled
+- name: low_pass_filter_0_0
+  id: low_pass_filter
+  parameters:
+    affinity: ''
+    alias: ''
+    beta: '6.76'
+    comment: ''
+    cutoff_freq: 5e3
+    decim: '1'
+    gain: '1'
+    interp: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    type: interp_fir_filter_fff
+    width: 1e3
+    win: window.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [744, 108.0]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_0_1
@@ -674,7 +739,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1424, 176.0]
+    coordinate: [1800, 216.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_0_2
@@ -868,7 +933,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1016, 424.0]
+    coordinate: [1192, 424.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_0_2_1
@@ -1062,12 +1127,15 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1424, 312.0]
+    coordinate: [1728, 344.0]
     rotation: 0
     state: enabled
 
 connections:
 - [analog_fm_demod_cf_1, '0', blocks_add_const_vxx_1, '0']
+- [analog_fm_demod_cf_1, '0', info_with_audio_demod_samp2str_1, '0']
+- [analog_fm_demod_cf_1, '0', qtgui_freq_sink_x_0_1_0, '0']
+- [analog_fm_demod_cf_1, '0', qtgui_time_sink_x_0_2_2, '0']
 - [analog_noise_source_x_0, '0', blocks_add_xx_1, '1']
 - [analog_noise_source_x_0_1, '0', blocks_add_xx_1_0, '1']
 - [audio_source_0, '0', hilbert_fc_0, '0']
@@ -1081,13 +1149,14 @@ connections:
 - [blocks_add_xx_1, '0', analog_fm_demod_cf_1, '0']
 - [blocks_add_xx_1, '0', qtgui_freq_sink_x_0_1, '0']
 - [blocks_add_xx_1, '0', qtgui_time_sink_x_0_2_0, '0']
-- [blocks_add_xx_1_0, '0', analog_fm_demod_cf_1, '0']
+- [blocks_add_xx_1_0, '0', blocks_freqshift_cc_0, '0']
 - [blocks_add_xx_1_0, '0', qtgui_time_sink_x_0_2_0, '0']
+- [blocks_freqshift_cc_0, '0', low_pass_filter_0, '0']
 - [blocks_throttle2_1_0, '0', blocks_vco_c_0_0, '0']
 - [blocks_throttle2_1_0, '0', blocks_vco_f_0_0, '0']
 - [blocks_vco_f_0, '0', blocks_throttle2_1, '0']
 - [blocks_vco_f_0_0, '0', hilbert_fc_0, '0']
-- [blocks_vco_f_0_0, '0', hilbert_fc_1, '0']
+- [blocks_vco_f_0_0, '0', low_pass_filter_0_0, '0']
 - [hilbert_fc_0, '0', analog_fm_demod_cf_1, '0']
 - [hilbert_fc_0, '0', qtgui_freq_sink_x_0_1, '0']
 - [hilbert_fc_0, '0', qtgui_time_sink_x_0_2_0, '0']
@@ -1096,6 +1165,8 @@ connections:
 - [info_with_audio_mod_source_str2samp_0_0, '0', blocks_add_const_vxx_1_0, '0']
 - [info_with_audio_mod_source_str2samp_0_0, '0', blocks_vco_f_0, '0']
 - [info_with_audio_mod_source_str2samp_0_0_0, '0', blocks_add_const_vxx_1_0_0, '0']
+- [low_pass_filter_0, '0', analog_fm_demod_cf_1, '0']
+- [low_pass_filter_0_0, '0', hilbert_fc_1, '0']
 
 metadata:
   file_format: 1
