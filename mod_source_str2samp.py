@@ -24,7 +24,7 @@ class mod_source_str2samp(gr.sync_block):
         self.t = t
         self.fs = fs
         self.msg = msg
-        self.preamble_length = round(fs*t*6)
+        self.preamble_length = round(fs*t*1)
         self.preamble_value = -1
         self.samples_queue = deque([self.preamble_value]*self.preamble_length + self.enqueue_from_string(msg, fs, t).tolist())
 

@@ -29,7 +29,7 @@ class demod_samp2str(gr.sync_block):
         self.samples_per_char = self.samples_per_symble*self.char_len
         self.voltage = voltage
         self.timeout = timeout
-        self.preamble_length = round(fs*t*6)
+        self.preamble_length = round(fs*t*1)
         self.is_signal = False
         self.bits = np.array([])
         self.remainder = np.array([])
@@ -60,12 +60,18 @@ class demod_samp2str(gr.sync_block):
                 self.remainder = full_data
                 return None
             # down_sample_len = len(in0)
-            non_zero_indexes = np.nonzero(full_data)[0] #all possible starts to the preamble(all non zero elements)
-            for idx in non_zero_indexes:
-                if (all(round(samp) == preamble_value for samp in full_data[idx:idx+self.preamble_length-1])): #preamble fount at idx
-                    self.is_signal = True
-                    signal_start_idx = idx+self.preamble_length
-                    break
+            non_zero_indexes = np.nonzero(full_data<=-1)[0] #all possible starts to the preamble(all non zero elements)
+
+            preamble_cor = -1*np.ones(self.preamble_length)
+            cor = np.correlate(full_data, preamble_cor, "valid")
+
+            max_cor = np.max(cor)
+            idx_max_cor = np.argmax(cor)
+
+            if(max_cor >= 0.95*self.preamble_length):
+                print("found pre")
+                signal_start_idx = idx_max_cor + self.preamble_length
+                self.is_signal = True
 
             #if we didnt find the preamble we dont want the remainder to increase in size forever keep only the nessery part - preamble length
             if signal_start_idx == None:
@@ -79,6 +85,7 @@ class demod_samp2str(gr.sync_block):
             start_signal_to_end = full_data[signal_start_idx:]
         else:
             start_signal_to_end = None
+            print("no signal")
             return None
         
         
@@ -116,8 +123,9 @@ class demod_samp2str(gr.sync_block):
                 bit_msg = np.append(bit_msg, 1)
             elif self.is_zero(row):
                 bit_msg = np.append(bit_msg, 0)
-            # else:
-            #     bit_msg = np.append(bit_msg, 505)
+            #else:
+                #bit_msg = np.append(bit_msg, 505)
+                #print("not found bit")
                 
         if len(bit_msg) != 8:
             return ''
